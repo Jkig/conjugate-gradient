@@ -3,7 +3,7 @@ import numpy as np
 def CGMethod(A,b,x0,Nmax,tol):
     #Initialize r,v,x (t,s come later)
     r = b - np.dot(A,x0)
-    v = b #How do we define this if x_0 is nonzero
+    v = r #How do we define this if x_0 is nonzero
     #store list of x values
     xLst = []
     xLst.append(x0)
