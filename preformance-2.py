@@ -4,6 +4,11 @@ import numpy as np
 # make sure you have installed ssgetpy
 import ssgetpy
 
+# to read from file into np.array
+from io import StringIO
+from scipy.io import mmread
+
+
 def driver(A,b,x0):
     #Set exit parameters
     Nmax = 100
@@ -29,28 +34,24 @@ def driver(A,b,x0):
 
 
 if __name__ == '__main__':
+    '''
     # Define System of Equations
     A = np.array([[9,3],[3,1]])
     b = np.array([-0.5,1])
     # initial guess
     x0 = np.array([0,0])
-    
-    # here we are trying a basic 2x2 matrix with det = 0
-    # driver(A,b,x0)
 
-    # as we see, x* goes to nan,nan, and maxes out iterations, in other words,
-    #   it does not converge
-    #   it av goes to zero, then <v, av> is zero, then we have div by zero and
-    #   nan shows up
+    driver(A, b, x0)
+    '''
     
-    
-    # did mandy write this,, is dot product right? and does it matter?
-    
-    # i'm going to pull a bigger mostly positive definite matrix with det=0
-    # i wanna do more testing here.
-    
-    n = (10, 12)
-    a = ssgetpy.search(rowbounds = n, colbounds = n, limit = 1)[0]
-    a.download(destpath = '~/derek/conjugate-gradient')
-    print(a)
+    f = open("matrix4.mtx", "r", encoding="utf-8")
+    text = f.read()
+    m = mmread(StringIO(text))
+    A = m.todense()
+
+    b = np.random.rand(14)
+    x0 = np.zeros(14)
+
+    driver(A, b, x0)
+
     
