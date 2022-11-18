@@ -27,10 +27,13 @@ def Driver():
     m = m.todense()
     # print(m)
 
+    '''
+    # some testing stuff, getting wierded out by SPD
     x = np.random.randint(0,10,14)
     y = np.matmul(np.matmul(np.transpose(x), m), x)
     print(x)
     print(y)
+    '''
     
 
 
