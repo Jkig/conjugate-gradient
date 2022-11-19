@@ -11,7 +11,7 @@ from scipy.io import mmread
 
 def driver(A,b,x0):
     #Set exit parameters
-    Nmax = 400
+    Nmax = 100
     tol = 1.0e-8
     #initial condition
     #run evaluator
