@@ -34,6 +34,13 @@ def driver(A,b,x0):
 
 
 if __name__ == '__main__':
+    # test case
+    A = np.array([[9,0,1],[0,1,2],[1,2,1]])
+    b = np.array([-0.5, 1, 1])
+    x0 = np.array([0,0,0])
+    driver(A,b,x0)
+    
+    # case 0 
     '''
     # Define System of Equations
     A = np.array([[9,3],[3,1]])
@@ -43,15 +50,43 @@ if __name__ == '__main__':
 
     driver(A, b, x0)
     '''
+    # case 1 - not fully positive definite (first sub determinets = 0)
+    A = np.array([[4,2,1,1],[2,-1,1,1],[1,1,1,2],[1,1,2,-1]])
+    b = np.array([-0.5, 1, 1,4])
+    x0 = np.array([0,0,0,0])
+    driver(A,b,x0)
+
+    # case 2 - ill conditioned number 1, k = 5
+    A = np.array([[4,2,1,1,5],[2,-1,1,1,3],[1,1,1,2,2],[1,1,2,-1,1],[5,3,2,1,9]])
+    b = np.array([-0.5, 1, 1,4, 6])
+    x0 = np.array([0,0,0,0,0])
+    print("case 1:")
+    driver(A,b,x0)
     
+
+    # case 3 - ill conditioned number 2, k = 10
+    A = np.array([[4,2,1,1],[2,-1,1,1],[1,1,1,2],[1,1,2,-1]])
+    b = np.array([-0.5, 1, 1,4])
+    x0 = np.array([0,0,0,0])
+    print()
+    print("case 3:")
+    driver(A,b,x0)
+
+
+
+    # case 4 - good example of poorly conditioned matrix
     f = open("matrix4.mtx", "r", encoding="utf-8")
     text = f.read()
     m = mmread(StringIO(text))
     A = m.todense()
+    A = np.array(A)
 
     b = np.random.rand(14)
     x0 = np.zeros(14)
 
+    print("case 4, condition number:", np.linalg.cond(A), "results:")
+    
     driver(A, b, x0)
+    
 
     
