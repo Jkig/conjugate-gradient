@@ -12,13 +12,13 @@ from scipy.io import mmread
 
 def Driver():
     # stuff here pulls matricies
-    '''
-    n = (10, 16)
+    #'''
+    n = (1900, 2000)
     a = ssgetpy.search(rowbounds = n, colbounds = n, dtype = 'real', isspd = True, limit = 1)[0]
-    a.download(destpath = 'matrix4')
-    print(a)
+    a.download(destpath = 'huge-matrix')
+    # print(a)
     return
-    '''
+    #'''
     # stuff here takes a .mtx file and returns a numpy array
     f = open("matrix4.mtx", "r", encoding="utf-8")
     text = f.read()
