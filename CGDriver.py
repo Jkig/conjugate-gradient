@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from CGMethod import CGMethod
+from jacobihybrid import CGJMethod
 import numpy as np
 
 def driver(A,b,x0):
@@ -8,7 +9,7 @@ def driver(A,b,x0):
     tol = 1.0e-8
     #initial condition
     #run evaluator
-    x,xLst,its,ier = CGMethod(A,b,x0,Nmax,tol)
+    x,xLst,its,ier = CGJMethod(A,b,x0,Nmax,tol)
     print("x = ", x)
     print("Number of Iterations: ", its)
 
@@ -16,11 +17,11 @@ def driver(A,b,x0):
     # list of abs errors vs last one
     abs_err = []
     last_index = len(xLst) - 1
-    
+
     for i in range(len(xLst)):
         error = np.linalg.norm(xLst[i]-xLst[last_index])
         abs_err.append(error)
-    
+
     plt.plot(range(0,len(xLst)),abs_err)
     plt.show()
 
@@ -33,9 +34,9 @@ if __name__ == '__main__':
     b = np.array([-0.5,1])
     #how to use other initial conditions (how do we define v_0)
     x0 = np.array([0,0])
-    
+
     driver(A,b,x0)
-    
+
     A = np.array([[9,0,1],[0,1,2],[1,2,1]])
     b = np.array([-0.5, 1, 1])
     x0 = np.array([0,0,0])
@@ -44,4 +45,10 @@ if __name__ == '__main__':
     A = np.array([[1,-1,1,0],[-1,4,2,1],[1,2,12,2],[0,1,2,6]])
     b = np.array([-0.5, 1, 1,4])
     x0 = np.array([0,0,0,0])
+    driver(A,b,x0)
+
+    A = np.array([[40000,2,1,1,5],[2,-1,1,1,3],[1,1,1,2,2],[1,1,2,-1,1],[5,3,2,1,9]])
+    b = np.array([-0.5, 1, 1,4, 6])
+    x0 = np.array([0,0,0,0,0])
+
     driver(A,b,x0)
