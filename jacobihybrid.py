@@ -52,9 +52,15 @@ def jacobi(A,b,N=25,x=None):
         x = (b - dot(R,x)) / D
     return x
 
+A = np.array([[400000000,2,1,1],[2,-1,1,1],[1,1,1,2],[1,1,2,-1]])
+b = np.array([-0.5, 1, 1,4])
+guess = np.array([0,0,0,0])
+'''
 A = array([[2.0,1.0],[5.0,7.0]])
 b = array([11.0,13.0])
 guess = array([1.0,1.0])
+'''
+
 
 sol = jacobi(A,b,N=25,x=guess)
 

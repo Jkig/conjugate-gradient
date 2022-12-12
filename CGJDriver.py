@@ -16,7 +16,7 @@ def driver(A,b,x0):
     tol = 1.0e-8
     #initial condition
     #run evaluator
-    x,xLst,its,ier = CGMethod(A,b,x0,Nmax,tol)
+    x,xLst,its,ier = CGJMethod(A,b,x0,Nmax,tol)
     print("x = ", x)
     print("Number of Iterations: ", its)
 
