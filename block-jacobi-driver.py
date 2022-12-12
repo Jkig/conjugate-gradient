@@ -16,6 +16,7 @@ def Block_Jacobi(A, block_size=2):
     # make a loop that keeps grabing and making sub-matricies
 
     sub_p = np.zeros([2,2])
+    i = 0
     for i in range(0,int(A[0].size/2)):
         sub_p[0,0] = A[2*i,2*i]
         sub_p[0,1] = A[2*i,2*i+1]
@@ -28,12 +29,25 @@ def Block_Jacobi(A, block_size=2):
         Pi[2*i,2*i+1] = sub_pi[0,1]
         Pi[2*i+1,2*i] = sub_pi[1,0]
         Pi[2*i+1,2*i+1] = sub_pi[1,1]
+    i+=1
+    if ((A[0].size)%2) == 1:
+        Pi[2*i,2*i] = (1/(A[2*i,2*i]))
+
+    '''    
+    print()
+    print(Pi)
+    print("A:-----")
+    print(A)
+    print(np.matmul(Pi,A))
+    '''
+    print("the post pre-conditioned matrix")
+    print(np.linalg.cond(np.matmul(Pi,A)))
     return Pi
 
 
 def driver(A,b,x0, do_precon):
     #Set exit parameters
-    Nmax = 800
+    Nmax = 1500
     tol = 1.0e-8
     #initial condition
 
@@ -46,7 +60,7 @@ def driver(A,b,x0, do_precon):
     
     #run evaluator
     x,xLst,its,ier = CGMethod(np.matmul(Pi,A),np.matmul(Pi,b),x0,Nmax,tol)
-    print("x = ", x)
+    # print("x = ", x)
     print("Number of Iterations: ", its)
 
     '''plotting'''
@@ -73,27 +87,21 @@ def driver(A,b,x0, do_precon):
 
 
 if __name__ == '__main__':
-    # run the drivers only if this is called from the command line
-    '''
-    A = np.array([[1,-1,1,0],[-1,4,2,1],[1,2,12,2],[0,1,2,6]])
-    b = np.array([-0.5, 1, 1,4])
-    x0 = np.array([0,0,0,0])
-    driver(A,b,x0)
+    A = np.identity(5)
+    A = 2*A
+    b = np.random.rand(5)
+    x0 = np.zeros(5)
 
-    f = open("pref.2.matrix6.mtx", "r", encoding="utf-8")
-    text = f.read()
-    m = mmread(StringIO(text))
-    A = m.todense()
-    A = np.array(A)
+    driver(A, b, x0, True)
 
-    b = np.random.rand(14)
-    x0 = np.zeros(14)
-    print()
-    print("case 6, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
-    driver(A, b, x0)
-    '''
+
     
-    # try it all with preconditioned:
+    
+    # good test:
+    print("good test")
+    
+    # with no pre-conditioning:
+    #   this doesn't even converge in 2900 iterations lol
     f = open("over200.mtx", "r", encoding="utf-8")
     text = f.read()
     m = mmread(StringIO(text))
@@ -103,12 +111,33 @@ if __name__ == '__main__':
     b = np.random.rand(237)
     x0 = np.zeros(237)
     print()
-    print("big matrix, preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
-    driver(A, b, x0, True)
-
-    # same with no pre-conditioning:
-    #   this doesn't even converge in 2900 iterations lol
-    print()
     print("big matrix, NOT - preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
     driver(A, b, x0, False)
+
+    # try it all with preconditioned:
+    print()
+    print("big matrix, preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0, True)
     
+    '''
+
+    # trying to find more decent examples:
+    # block jacobi blows up here
+    f = open("662_bus.mtx", "r", encoding="utf-8")
+    text = f.read()
+    m = mmread(StringIO(text))
+    A = m.todense()
+    A = np.array(A)
+    
+    b = np.random.rand(662)
+    x0 = np.zeros(662)
+    print()
+    print("662_bus, NOT - preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0, False)
+
+    # try it all with preconditioned:
+    print()
+    print("662_bus, preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0, True)
+    '''
+
