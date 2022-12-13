@@ -45,21 +45,6 @@ def CGJ3Method(A,b,x0,Nmax,tol):
     ier = 1
     return (x,xLst,its,ier)
 
-def jacobi(A,b,N=25,x=None):
-    """Solves the equation Ax=b via the Jacobi iterative method."""
-    # Create an initial guess if needed
-    if x is None:
-        x = zeros(len(A[0]))
-
-    # Create a vector of the diagonal elements of A
-    # and subtract them from A
-    D = diag(A)
-    R = A - diagflat(D)
-
-    # Iterate for N times
-    for i in range(N):
-        x = (b - dot(R,x)) / D
-    return x
 
 A = np.array([[400000000,2,1,1],[2,-1,1,1],[1,1,1,2],[1,1,2,-1]])
 b = np.array([-0.5, 1, 1,4])
