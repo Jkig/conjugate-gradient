@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 from CGMethod import CGMethod
 from jacobihybrid import CGJMethod
+from jacobi2hybrid import CGJ2Method
+from jacobi3hybrid import CGJ3Method
 import numpy as np
 # make sure you have installed ssgetpy
 import ssgetpy
@@ -12,16 +14,25 @@ from scipy.io import mmread
 
 def driver(A,b,x0):
     #Set exit parameters
-    Nmax = 100
+    Nmax = 1000
     tol = 1.0e-8
     #initial condition
     #run evaluator
-    x,xLst,its,ier = CGJMethod(A,b,x0,Nmax,tol)
+    x,xLst,its,ier = CGMethod(A,b,x0,Nmax,tol)
     print("x = ", x)
     print("Number of Iterations: ", its)
+    x,xLst,its,ier = CGJMethod(A,b,x0,Nmax,tol)
+    print("x = ", x)
+    print("Number of Iterations Jacobi1: ", its)
+    x,xLst,its,ier = CGJ2Method(A,b,x0,Nmax,tol)
+    print("x = ", x)
+    print("Number of Iterations Jacobi2: ", its)
+    x,xLst,its,ier = CGJ3Method(A,b,x0,Nmax,tol)
+    print("x = ", x)
+    print("Number of Iterations Jacobi3: ", its)
 
     '''plotting'''
-    # list of abs errors vs last one
+    '''# list of abs errors vs last one
     abs_err = []
     last_index = len(xLst) - 1
 
@@ -30,7 +41,7 @@ def driver(A,b,x0):
         abs_err.append(error)
 
     plt.plot(range(0,len(xLst)),abs_err)
-    plt.show()
+    plt.show()'''
 
 
 
@@ -82,6 +93,18 @@ if __name__ == '__main__':
     A = m.todense()
     A = np.array(A)
 
-    b = np.random.rand(14)
+    b = np.ones(14)
     x0 = np.zeros(14)
     driver(A,b,x0)
+
+    f = open("662_bus.mtx", "r", encoding="utf-8")
+    text = f.read()
+    m = mmread(StringIO(text))
+    A = m.todense()
+    A = np.array(A)
+
+    b = np.ones(662)
+    x0 = np.zeros(662)
+    print()
+    print("662_bus, NOT - preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0)

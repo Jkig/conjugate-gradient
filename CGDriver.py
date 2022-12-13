@@ -12,7 +12,7 @@ from scipy.io import mmread
 
 def driver(A,b,x0):
     #Set exit parameters
-    Nmax = 100
+    Nmax = 1000
     tol = 1.0e-8
     #initial condition
     #run evaluator
@@ -68,12 +68,15 @@ if __name__ == '__main__':
     driver(A,b,x0)
 
     A=np.array([[ 1.00665013, -1.41434036, -0.4953264,  -0.43520063],
-                [-1.41434036, 3.81637179,  0.58656485,  0.5053143 ],
+                [-1, 3.81637179,  0.58656485,  0.5053143 ],
                 [-0.4953264,   0.58656485,  0.87865608,  0.00746661],
                 [-0.43520063,  0.5053143,   0.00746661,  0.79932913]] )
     b=np.array([-0.99475612,  2.58211651, 0.68135327,  0.56259304])
     x0 = np.array([0,0,0,0])
     driver(A,b,x0)
+    x = np.linalg.solve(A, b)
+    print("Actual solution: ", x)
+
 
 
     f = open("pref.2.matrix4.mtx", "r", encoding="utf-8")
@@ -85,3 +88,22 @@ if __name__ == '__main__':
     b = np.random.rand(14)
     x0 = np.zeros(14)
     driver(A,b,x0)
+
+
+    f = open("over200.mtx", "r", encoding="utf-8")
+    text = f.read()
+    m = mmread(StringIO(text))
+    A = m.todense()
+    A = np.array(A)
+
+    f = open("662_bus.mtx", "r", encoding="utf-8")
+    text = f.read()
+    m = mmread(StringIO(text))
+    A = m.todense()
+    A = np.array(A)
+
+    b = np.random.rand(662)
+    x0 = np.zeros(662)
+    print()
+    print("662_bus, NOT - preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0)
