@@ -33,7 +33,7 @@ def Block_Jacobi(A, block_size=2):
     if ((A[0].size)%2) == 1:
         Pi[2*i,2*i] = (1/(A[2*i,2*i]))
 
-    '''    
+    '''
     print()
     print(Pi)
     print("A:-----")
@@ -45,7 +45,7 @@ def Block_Jacobi(A, block_size=2):
     return Pi
 
 
-def driver(A,b,x0, do_precon):
+def driver(A,b,x0, do_precon=True):
     #Set exit parameters
     Nmax = 1500
     tol = 1.0e-8
@@ -87,16 +87,6 @@ def driver(A,b,x0, do_precon):
 
 
 if __name__ == '__main__':
-    A = np.identity(5)
-    A = 2*A
-    b = np.random.rand(5)
-    x0 = np.zeros(5)
-
-    driver(A, b, x0, True)
-
-
-    
-    
     # good test:
     print("good test")
     
@@ -119,10 +109,9 @@ if __name__ == '__main__':
     print("big matrix, preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
     driver(A, b, x0, True)
     
+    
     '''
-
-    # trying to find more decent examples:
-    # block jacobi blows up here
+    # block jacobi ruins it
     f = open("662_bus.mtx", "r", encoding="utf-8")
     text = f.read()
     m = mmread(StringIO(text))
@@ -139,5 +128,64 @@ if __name__ == '__main__':
     print()
     print("662_bus, preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
     driver(A, b, x0, True)
+
+
+    # also doesn't work
+    f = open("685_bus.mtx", "r", encoding="utf-8")
+    text = f.read()
+    m = mmread(StringIO(text))
+    A = m.todense()
+    A = np.array(A)
+    
+    b = np.random.rand(685)
+    x0 = np.zeros(685)
+    print()
+    print("685_bus, NOT - preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0, False)
+
+    # try it all with preconditioned:
+    print()
+    print("685_bus, preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0, True)
+
+    
+    # also doesn't work??
+    f = open("bcsstk06.mtx", "r", encoding="utf-8")
+    text = f.read()
+    m = mmread(StringIO(text))
+    A = m.todense()
+    A = np.array(A)
+    
+    b = np.random.rand(420)
+    x0 = np.zeros(420)
+    print()
+    print("bcsstk06, NOT - preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0, False)
+
+    # try it all with preconditioned:
+    print()
+    print("bcsstk06, preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0, True)
+
+
+
+    # also doesn't work??
+    f = open("bcsstk07.mtx", "r", encoding="utf-8")
+    text = f.read()
+    m = mmread(StringIO(text))
+    A = m.todense()
+    A = np.array(A)
+    
+    b = np.random.rand(420)
+    x0 = np.zeros(420)
+    print()
+    print("bcsstk07, NOT - preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0, False)
+
+    # try it all with preconditioned:
+    print()
+    print("bcsstk07, preconditioned, condition number:", np.linalg.cond(A), "size of matrix: ", len(A))
+    driver(A, b, x0, True)
     '''
+    
 
